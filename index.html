@@ -1,215 +1,500 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Тоска ночи</title>
-
-<style>
-:root {
-    --title-size: clamp(24px, 6vw, 42px);
-    --line-size: clamp(15px, 4.2vw, 22px);
-    --highlight-size: clamp(16px, 4.5vw, 23px);
-    --date-size: clamp(13px, 3.5vw, 20px);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Georgia, serif;
-    background: linear-gradient(135deg, #0c0c2e, #1e1e4a);
-    color: #f0f0ff;
-    min-height: 100svh;
-    padding: clamp(12px, 4vw, 24px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-/* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
-.container {
-    width: 100%;
-    max-width: 560px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding-top: 80px;
-    animation: fadeIn 1.2s ease forwards;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0 }
-    to { opacity: 1 }
-}
-
-/* ===== ЗАГОЛОВОК ===== */
-.title {
-    font-size: var(--title-size);
-    color: #FFD700;
-    text-align: left;
-    font-weight: bold;
-    letter-spacing: 1.5px;
-    margin-bottom: 16px;
-    border-bottom: 3px solid rgba(255,215,0,.4);
-    padding-bottom: 10px;
-    text-shadow: 0 0 20px rgba(255,215,0,.6);
-    animation: glow 3s infinite ease-in-out;
-}
-
-@keyframes glow {
-    0%,100% { text-shadow: 0 0 15px rgba(255,215,0,.6) }
-    50% { text-shadow: 0 0 30px rgba(255,215,0,.9) }
-}
-
-/* ===== СТИХИ ===== */
-.poem-container {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 6px;
-}
-
-.poem-container::-webkit-scrollbar {
-    display: none;
-}
-
-.stanza {
-    margin-bottom: clamp(10px, 3vw, 20px);
-    padding: clamp(12px, 3.5vw, 20px);
-    background: rgba(255,255,255,.07);
-    border-radius: 14px;
-    border-left: 4px solid rgba(255,215,0,.4);
-    box-shadow: 0 4px 12px rgba(0,0,0,.25);
-    animation: stanzaFade .9s ease forwards;
-}
-
-@keyframes stanzaFade {
-    from { opacity: 0; transform: translateY(10px) }
-    to { opacity: 1; transform: translateY(0) }
-}
-
-.line {
-    font-size: var(--line-size);
-    line-height: 1.6;
-    margin-bottom: 8px;
-    text-shadow: 0 2px 6px rgba(0,0,0,.7);
-}
-
-.highlight {
-    font-size: var(--highlight-size);
-    font-style: italic;
-    color: #ffccd5;
-    text-shadow: 0 0 12px rgba(255,204,213,.6);
-}
-
-/* ===== ДАТА ===== */
-.footer {
-    border-top: 2px solid rgba(255,215,0,.3);
-    padding-top: 12px;
-    margin-top: 10px;
-}
-
-.date {
-    text-align: center;
-    font-size: var(--date-size);
-    letter-spacing: 2px;
-    color: #a0a0e0;
-}
-
-/* ===== ЛУНА ===== */
-.crescent-moon {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: clamp(50px, 15vw, 90px);
-    height: clamp(50px, 15vw, 90px);
-    border-radius: 50%;
-    box-shadow: inset -15px 0 0 #ffecb3;
-    filter: drop-shadow(0 0 18px rgba(255,236,179,.8));
-    animation: moonPulse 4s infinite ease-in-out;
-}
-
-@keyframes moonPulse {
-    0%,100% { opacity: .85 }
-    50% { opacity: 1 }
-}
-
-/* ===== ЗВЁЗДЫ ===== */
-.stars {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-}
-
-.star {
-    position: absolute;
-    background: white;
-    border-radius: 50%;
-    opacity: .7;
-    animation: twinkle 3s infinite;
-}
-
-@keyframes twinkle {
-    0%,100% { opacity: .4 }
-    50% { opacity: 1 }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Тоска ночи</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #0c0c2e 0%, #1e1e4a 100%);
+            color: #f0f0ff;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            width: 100vw;
+            overflow-x: hidden;
+            padding: max(3vw, 12px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.6;
+            position: relative;
+            text-align: center;
+        }
+        
+        html {
+            height: -webkit-fill-available;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: min(90vw, 800px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: clamp(1.5rem, 4vw, 2.5rem);
+            opacity: 0;
+            animation: fadeInContainer 1.2s ease forwards;
+            position: relative;
+            padding: max(4vw, 20px) 0;
+            flex: 1;
+        }
+        
+        @keyframes fadeInContainer {
+            to { opacity: 1; }
+        }
+        
+        .header {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(0.75rem, 2vw, 1.25rem);
+        }
+        
+        .title {
+            font-size: clamp(1.75rem, 6vw, 2.5rem);
+            color: #FFD700;
+            text-shadow: 0 0 clamp(10px, 2vw, 20px) rgba(255, 215, 0, 0.6);
+            font-weight: bold;
+            letter-spacing: clamp(1px, 0.5vw, 2px);
+            opacity: 0;
+            animation: slideInTitle 0.8s ease 0.3s forwards;
+            position: relative;
+            padding-bottom: clamp(0.5rem, 1.5vw, 1rem);
+            width: 100%;
+            text-wrap: balance;
+        }
+        
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(60vw, 300px);
+            height: clamp(1px, 0.3vw, 3px);
+            background: linear-gradient(to right, transparent, #FFD700, transparent);
+        }
+        
+        @keyframes slideInTitle {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .poem-container {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            padding: clamp(0.5rem, 1.5vw, 1rem) 0;
+            max-height: 60vh;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .poem-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .poem-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        .poem-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 4px;
+        }
+        
+        .poem-content {
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(1rem, 3vh, 2rem);
+            padding: 0 max(1vw, 8px);
+        }
+        
+        .stanza {
+            width: 100%;
+            max-width: min(95vw, 700px);
+            animation: fadeInStanza 0.8s ease forwards;
+            animation-delay: calc(var(--stanza-index) * 0.1s + 0.5s);
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.35rem, 1vh, 0.5rem);
+        }
+        
+        @keyframes fadeInStanza {
+            to { opacity: 1; }
+        }
+        
+        .line {
+            font-size: clamp(0.95rem, 3.5vw, 1.25rem);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            line-height: 1.6;
+            letter-spacing: 0.3px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            text-wrap: pretty;
+        }
+        
+        .highlight {
+            color: inherit;
+            font-style: normal;
+            font-weight: normal;
+        }
+        
+        .footer {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: clamp(0.75rem, 2vw, 1.25rem);
+            margin-top: clamp(0.5rem, 1.5vw, 1rem);
+        }
+        
+        .date {
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
+            color: #a0a0e0;
+            letter-spacing: clamp(1px, 0.5vw, 3px);
+            opacity: 0;
+            animation: fadeInDate 0.8s ease 2s forwards;
+            font-weight: 300;
+            text-transform: uppercase;
+            padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 2rem);
+            border-top: 1px solid rgba(160, 160, 224, 0.3);
+            width: fit-content;
+        }
+        
+        @keyframes fadeInDate {
+            to { opacity: 1; }
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        
+        .crescent-moon {
+            position: fixed;
+            top: max(3vw, 15px);
+            right: max(3vw, 15px);
+            width: clamp(40px, 10vw, 70px);
+            height: clamp(40px, 10vw, 70px);
+            background: transparent;
+            border-radius: 50%;
+            box-shadow: inset -12px 0 0 0 #ffecb3;
+            opacity: 0;
+            animation: fadeInMoon 1.5s ease 0.5s forwards;
+            z-index: 1;
+            filter: drop-shadow(0 0 clamp(10px, 2vw, 20px) rgba(255, 236, 179, 0.8));
+        }
+        
+        @keyframes fadeInMoon {
+            to { opacity: 0.9; }
+        }
+        
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 clamp(8px, 1.5vw, 15px) rgba(255, 215, 0, 0.6),
+                           0 0 clamp(12px, 2.5vw, 25px) rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 clamp(10px, 2vw, 20px) rgba(255, 215, 0, 0.8),
+                           0 0 clamp(18px, 3.5vw, 35px) rgba(255, 215, 0, 0.6),
+                           0 0 clamp(25px, 5vw, 50px) rgba(255, 215, 0, 0.4);
+            }
+        }
+        
+        .title {
+            animation: slideInTitle 0.8s ease 0.3s forwards,
+                      glow 3s ease-in-out infinite 1.5s;
+        }
+        
+        /* Ландшафтная ориентация */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .container {
+                gap: clamp(0.75rem, 2vh, 1.5rem);
+                padding: max(2vw, 10px) 0;
+            }
+            
+            .poem-container {
+                max-height: 50vh;
+            }
+            
+            .stanza {
+                gap: clamp(0.25rem, 0.8vh, 0.4rem);
+            }
+            
+            .line {
+                font-size: clamp(0.85rem, 2.5vh, 1rem);
+                line-height: 1.5;
+            }
+            
+            .title {
+                font-size: clamp(1.5rem, 4vh, 2rem);
+            }
+            
+            .crescent-moon {
+                width: clamp(30px, 8vh, 50px);
+                height: clamp(30px, 8vh, 50px);
+                top: max(2vh, 10px);
+                right: max(2vh, 10px);
+            }
+        }
+        
+        /* Очень маленькие экраны */
+        @media (max-width: 360px) {
+            .line {
+                font-size: clamp(0.9rem, 4vw, 1.1rem);
+            }
+            
+            .title {
+                font-size: clamp(1.5rem, 7vw, 2rem);
+            }
+        }
+        
+        /* Большие экраны */
+        @media (min-width: 1024px) {
+            .container {
+                gap: 2.5rem;
+            }
+            
+            .poem-content {
+                gap: 1.75rem;
+            }
+            
+            .line {
+                font-size: 1.35rem;
+                line-height: 1.7;
+            }
+            
+            .title {
+                font-size: 2.75rem;
+            }
+        }
+        
+        /* Поддержка темной темы */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #050518 0%, #121233 100%);
+            }
+        }
+        
+        /* Поддержка редукции движения */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
-
 <body>
-
-<div class="stars" id="stars"></div>
-<div class="crescent-moon"></div>
-
-<div class="container">
-    <h1 class="title">Тоска ночи</h1>
-
-    <div class="poem-container">
-        <div class="stanza">
-            <div class="line">Не могу уснуть в тиши ночной</div>
-            <div class="line">Душа тоскует по тебе одной</div>
-            <div class="line">Всё вспоминаю те вечера</div>
-            <div class="line">Где смех звучал, где ты была со мной</div>
+    <div class="stars" id="stars"></div>
+    <div class="crescent-moon"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Тоска ночи</h1>
         </div>
-
-        <div class="stanza">
-            <div class="line">Ты вытянула душу из ледяных оков</div>
-            <div class="line">Подарила надежду средь серых миров</div>
-            <div class="line">С тобой каждый миг стал как светлый рассвет</div>
-            <div class="line highlight">Ты — мой маяк в буре судебных бед</div>
+        
+        <div class="poem-container">
+            <div class="poem-content">
+                <div class="stanza" style="--stanza-index: 0">
+                    <div class="line">Не могу уснуть в тиши ночной</div>
+                    <div class="line">Душа тоскует по тебе одной</div>
+                    <div class="line">Всё вспоминаю те вечера</div>
+                    <div class="line">Где смех звучал, где ты была со мной</div>
+                </div>
+                
+                <div class="stanza" style="--stanza-index: 1">
+                    <div class="line">Ты вытянула душу из ледяных оков</div>
+                    <div class="line">Подарила надежду средь серых миров</div>
+                    <div class="line">С тобой каждый миг стал как светлый рассвет</div>
+                    <div class="line">Ты — мой маяк в буре судебных бед</div>
+                </div>
+                
+                <div class="stanza" style="--stanza-index: 2">
+                    <div class="line">Я не думал, что дружба исчезнет, как дым</div>
+                    <div class="line">Что когда-то родное станет чужим</div>
+                    <div class="line">Всё казалось таким нерушимым, простым</div>
+                    <div class="line">Но теперь этот путь навсегда стал иным</div>
+                </div>
+                
+                <div class="stanza" style="--stanza-index: 3">
+                    <div class="line">Твоя красота была скрыта в тени</div>
+                    <div class="line">Ты не верила в неё, но я видел в тебе мечты</div>
+                    <div class="line">Ты думала, что некрасива, не в силах понять</div>
+                    <div class="line">Что мир замер, когда ты начинала сиять</div>
+                </div>
+                
+                <div class="stanza" style="--stanza-index: 4">
+                    <div class="line">Я слушал тебя, забывая обо всём</div>
+                    <div class="line">Твой голос был музыкой в сердце моём</div>
+                    <div class="line">Он звучал, словно ветер в утренней тиши</div>
+                    <div class="line">И наполнял теплом одинокие дни</div>
+                </div>
+                
+                <div class="stanza" style="--stanza-index: 5">
+                    <div class="line">Я думал, что смогу без тебя дальше жить</div>
+                    <div class="line">Что время заставит боль эту забыть</div>
+                    <div class="line">Но каждый мой день становился пустым</div>
+                    <div class="line">И мир без тебя оказался чужим</div>
+                </div>
+                
+                <div class="stanza" style="--stanza-index: 6">
+                    <div class="line">Хочу я признаться, что без тебя жизнь пуста</div>
+                    <div class="line">Что тоска заполняет всю душу до дна</div>
+                    <div class="line">Но слова застревают, боясь твоих глаз</div>
+                    <div class="line">И молчанье лишь шепчет о боли сейчас</div>
+                </div>
+                
+                <div class="stanza" style="--stanza-index: 7">
+                    <div class="line">Ты спасала меня от мрака и зла</div>
+                    <div class="line">Давала мне силу идти до конца</div>
+                    <div class="line">Но без тебя я потерян, разбит</div>
+                    <div class="line">И сердце в грехах, как в пепле, горит</div>
+                </div>
+                
+                <div class="stanza" style="--stanza-index: 8">
+                    <div class="line">Прощай, пусть Всевышний бережёт тебя впредь</div>
+                    <div class="line">Пусть сердце твоё не узнает потерь</div>
+                    <div class="line">Пусть свет озаряет твой жизненный путь</div>
+                    <div class="line">А я научусь без тебя дальше жить</div>
+                </div>
+            </div>
         </div>
-
-        <div class="stanza">
-            <div class="line">Прощай, пусть Всевышний бережёт тебя впредь</div>
-            <div class="line">Пусть сердце твоё не узнает потерь</div>
-            <div class="line">Пусть свет озаряет твой жизненный путь</div>
-            <div class="line">А я научусь без тебя дальше жить</div>
+        
+        <div class="footer">
+            <div class="date">07.01.25 – 31.03.25</div>
         </div>
     </div>
 
-    <div class="footer">
-        <div class="date">07.01.25 – 31.03.25</div>
-    </div>
-</div>
-
-<script>
-const stars = document.getElementById('stars');
-for (let i = 0; i < 100; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    const size = Math.random() * 3 + 1;
-    s.style.width = s.style.height = size + 'px';
-    s.style.left = Math.random() * 100 + '%';
-    s.style.top = Math.random() * 100 + '%';
-    s.style.animationDelay = Math.random() * 3 + 's';
-    stars.appendChild(s);
-}
-</script>
-
+    <script>
+        // Создание звездного фона
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = Math.min(120, Math.floor(window.innerWidth * window.innerHeight / 8000));
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 2 + 1;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 3;
+                const duration = Math.random() * 3 + 2;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.animationDelay = `${delay}s`;
+                star.style.animationDuration = `${duration}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Функция для плавного мерцания луны
+        function moonGlowEffect() {
+            const moon = document.querySelector('.crescent-moon');
+            if (!moon) return;
+            
+            let brightness = 0.8;
+            let increasing = true;
+            
+            const glowInterval = setInterval(() => {
+                if (increasing) {
+                    brightness += 0.015;
+                    if (brightness >= 1) increasing = false;
+                } else {
+                    brightness -= 0.015;
+                    if (brightness <= 0.8) increasing = true;
+                }
+                
+                moon.style.opacity = brightness.toString();
+                moon.style.filter = `drop-shadow(0 0 ${Math.max(10, window.innerWidth * 0.02)}px rgba(255, 236, 179, ${brightness * 0.8}))`;
+            }, 100);
+            
+            // Очистка при размонтировании
+            return () => clearInterval(glowInterval);
+        }
+        
+        // Запуск анимаций строф
+        function startStanzaAnimations() {
+            document.querySelectorAll('.stanza').forEach((stanza, index) => {
+                stanza.style.animationDelay = `${index * 0.07 + 0.5}s`;
+            });
+        }
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            const cleanupMoonGlow = moonGlowEffect();
+            startStanzaAnimations();
+            
+            // Оптимизация для мобильных устройств
+            const handleResize = () => {
+                // Пересоздаем звезды при значительном изменении размера
+                if (window.innerWidth > 768 || window.innerHeight > 1024) {
+                    const starsContainer = document.getElementById('stars');
+                    starsContainer.innerHTML = '';
+                    createStars();
+                }
+            };
+            
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(handleResize, 250);
+            });
+            
+            // Очистка при размонтировании
+            window.addEventListener('beforeunload', () => {
+                if (cleanupMoonGlow) cleanupMoonGlow();
+                window.removeEventListener('resize', handleResize);
+            });
+            
+            // Улучшение прокрутки на iOS
+            document.querySelector('.poem-container').addEventListener('touchstart', function() {
+                this.style.WebkitOverflowScrolling = 'touch';
+            });
+        });
+    </script>
 </body>
 </html>
-
