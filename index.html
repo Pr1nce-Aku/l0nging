@@ -98,7 +98,7 @@
             align-items: center;
             overflow-y: auto;
             padding: clamp(0.5rem, 1.5vw, 1rem) 0;
-            max-height: 60vh;
+            max-height: 80vh;
             -webkit-overflow-scrolling: touch;
         }
         
@@ -118,10 +118,10 @@
         
         .poem-content {
             width: 100%;
-            text-align: center;
+            text-align: left;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             gap: clamp(1rem, 3vh, 2rem);
             padding: 0 max(1vw, 8px);
         }
@@ -135,6 +135,7 @@
             display: flex;
             flex-direction: column;
             gap: clamp(0.35rem, 1vh, 0.5rem);
+            margin-left: clamp(1rem, 3vw, 2rem);
         }
         
         @keyframes fadeInStanza {
@@ -498,3 +499,4 @@
     </script>
 </body>
 </html>
+
